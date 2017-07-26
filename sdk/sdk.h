@@ -23,11 +23,15 @@
 + (void) openBrowser:(NSString*)url;
 
 
-+ (Boolean) start_record:(id) data;
++ (BOOL) start_record:(id) data;
 + (void) stop_record;
 + (int) record_getVolume;
 
 
++ (void) start_locate;
++ (void) stop_locate;
++ (double) get_distance:(double)alongitude :(double)alatitude :(double)blongitude :(double) blatitude;
+//+ (double) get_distance:(id)array;
 //-------------------------
 + (BOOL) handle_url:(NSURL*)url;
 + (BOOL) handle_url:(NSURL*)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options;

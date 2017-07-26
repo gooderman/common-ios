@@ -7,6 +7,7 @@
 //
 #import "sdk.h"
 #import "sdk_audio.h"
+#include "sdk_baiduloc.h"
 #include "CCLuaBridge.h"
 #import "sdk_um.h"
 //#import <sdk_wx.h>
@@ -89,6 +90,7 @@ static NSMutableDictionary* gDic;
     if(gDic)
     {
         [sdk um_init:gDic];
+        [sdk loc_init:gDic];
     }
     else
     {
@@ -170,6 +172,47 @@ static NSMutableDictionary* gDic;
 {
    return [[sdk_audio sharedSdkAudio] record_getVolume];
 }
+
++ (void) start_locate;
+{
+    [sdk loc_start];
+}
++ (void) stop_locate;
+{
+    [sdk loc_stop];
+}
++ (double) get_distance:(double)alongitude :(double)alatitude :(double)blongitude :(double)blatitude
+{
+    return [sdk loc_get_distance:alongitude :alatitude :blongitude :blatitude];
+}
+
+//+ (double) get_distance:(id)data
+//{
+//    NSMutableArray *array = (NSMutableArray *)data;
+//    if([array count]<4)
+//    {
+//        NSLog(@"sdk get_distance param numb less");
+//        return 0;
+//    }
+//    BOOL valid = YES;
+//    for(int i=0;i<4;i++)
+//    {
+//        if( [array[0] isKindOfClass:[NSNumber class]])
+//        {
+//            valid = NO;
+//        }
+//    }
+//    if(!valid)
+//    {
+//        return 0;
+//    }
+//    NSNumber* a1 = (NSNumber*)array[0];
+//    NSNumber* a2 = (NSNumber*)array[1];
+//    NSNumber* b1 = (NSNumber*)array[2];
+//    NSNumber* b2 = (NSNumber*)array[3];
+//    
+//    return [sdk loc_get_distance:[a1 doubleValue] :[a2 doubleValue] :[b1 doubleValue] :[b2 doubleValue]];
+//}
 
 //-------------------------
 + (BOOL) handle_url:(NSURL*)url

@@ -22,6 +22,8 @@
 #define TOKEN_UM_APPKEY @"umappkey"
 #define TOKEN_WX_APPKEY @"wxappkey"
 #define TOKEN_WX_APPSECRET @"wxappsecret"
+#define TOKEN_BD_LOCKEY @"baidulockey"
+
 /////---------------------------
 #define SDK_ERROR           @"error"
 #define SDK_EVT             @"evt"
@@ -47,6 +49,13 @@
 #define SDK_EVT_RECORD       @"record"
 #define SDK_RECORD_FILENAME  @"filename"
 #define SDK_RECORD_STATE     @"state"
+
+// --- 定位 ----
+#define SDK_EVT_LOCATION       @"locate"
+#define SDK_LOCATION_LONGITUDE  @"longitude"
+#define SDK_LOCATION_LATITUDE   @"latitude"
+#define SDK_LOCATION_ADDRESS   @"address"
+#define SDK_LOCATION_ADDRESS_DESCRIBE   @"discribe"
 
 
 
