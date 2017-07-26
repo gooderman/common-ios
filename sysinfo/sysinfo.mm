@@ -19,6 +19,7 @@
 #import "getipaddr.h"
 
 #import "SimulateIDFA.h"
+#import "GameUUID.h"
 
 #import "sys/utsname.h"
 
@@ -64,7 +65,8 @@
 
 + (int) batteryinfo
 {
-    return 90;
+    [UIDevice currentDevice].batteryMonitoringEnabled = YES;
+    return 100*[UIDevice currentDevice].batteryLevel;
 }
 
 + (NSString*) imsi
@@ -74,8 +76,10 @@
 
 + (NSString*) imei
 {
-    NSString *simulateIDFA = [SimulateIDFA createSimulateIDFA];
-    return simulateIDFA;
+//    NSString *simulateIDFA = [SimulateIDFA createSimulateIDFA];
+//    return simulateIDFA;
+    NSString* uuid = [GameUUID uniqueAppId];
+    return uuid;
 }
 
 + (NSString*) ipaddress

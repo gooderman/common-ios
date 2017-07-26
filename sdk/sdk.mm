@@ -215,6 +215,25 @@ static NSMutableDictionary* gDic;
 //}
 
 //-------------------------
++ (NSString*) get_pasteboard
+{
+    UIPasteboard* pasteboard = [UIPasteboard generalPasteboard];
+    NSString* ss = [pasteboard string];
+    if(ss==nil)
+    {
+        return @"";
+    }
+    return ss;
+}
+
++ (void) set_pasteboard:(NSString*) str
+{
+    NSString* s = str;
+    UIPasteboard* pasteboard = [UIPasteboard generalPasteboard];
+    [pasteboard setString:s];
+}
+
+//-------------------------
 + (BOOL) handle_url:(NSURL*)url
 {
     return [sdk um_handle_url:url];

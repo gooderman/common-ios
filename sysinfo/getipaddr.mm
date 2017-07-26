@@ -41,7 +41,12 @@
 
 + (NSString*) ip
 {
-    return [getipaddr ipv4];
+    NSString* ipv4 = [getipaddr ipv4];
+    if([ipv4 isEqualToString:@"0.0.0.0"])
+    {
+        return [getipaddr ipv6];
+    }
+    return ipv4;
 }
 
 + (NSString *)getIPAddress:(BOOL)preferIPv4

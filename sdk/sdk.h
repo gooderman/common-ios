@@ -32,6 +32,8 @@
 + (void) stop_locate;
 + (double) get_distance:(double)alongitude :(double)alatitude :(double)blongitude :(double) blatitude;
 //+ (double) get_distance:(id)array;
++ (NSString*) get_pasteboard;
++ (void) set_pasteboard:(NSString*) str;
 //-------------------------
 + (BOOL) handle_url:(NSURL*)url;
 + (BOOL) handle_url:(NSURL*)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options;
