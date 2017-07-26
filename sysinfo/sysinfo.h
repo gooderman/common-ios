@@ -29,5 +29,7 @@
 + (BOOL) isinstall:(NSString*) name;//是否安装了某个app
 + (void) openapp:(NSString*) name;//打开app
 + (unsigned long) elapsedtime;//开机时间秒
++ (NSString*) metadata:(NSString*)key;//bund info
++ (NSString*)deviceVersion;//详细到手机型号
 
 @end
