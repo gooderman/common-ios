@@ -142,17 +142,18 @@ static NSMutableDictionary* gDic;
 + (void) openBrowser:(NSString*)urlstr
 {
     
-    WbViewController* wbvc =  [WbViewController create:urlstr];
-    [[sdk uivc] presentViewController:wbvc animated:YES completion:nil];
-    
-//    float sysver = [[[UIDevice currentDevice] systemVersion] floatValue];
-//    if(sysver>9.0)
-//    {
-//
-//        NSURL* url = [NSURL URLWithString:urlstr];//创建URL
-//        SFSafariViewController* sfvc = [[SFSafariViewController alloc] initWithURL:url];
-//        [[sdk uivc] presentViewController:sfvc animated:YES completion:nil];
-//    }
+    float sysver = [[[UIDevice currentDevice] systemVersion] floatValue];
+    if(sysver>9.0)
+    {
+        NSURL* url = [NSURL URLWithString:urlstr];//创建URL
+        SFSafariViewController* sfvc = [[SFSafariViewController alloc] initWithURL:url];
+        [[sdk uivc] presentViewController:sfvc animated:YES completion:nil];
+    }
+    else
+    {
+        WbViewController* wbvc =  [WbViewController create:urlstr];
+        [[sdk uivc] presentViewController:wbvc animated:YES completion:nil];
+    }
     
 }
 

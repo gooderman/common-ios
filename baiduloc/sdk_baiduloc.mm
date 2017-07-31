@@ -39,7 +39,7 @@
 {
     return [bdlocate getDistance:ajd :awd :bjd :bwd];
 }
-+ (void) loc_notify:(int)error : (double)ajd : (double)awd : (NSString*)address
++ (void) loc_notify:(int)error : (double)ajd : (double)awd : (id)result
 {
     [[bdlocate sharedBdLocate] stop];
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:10];
@@ -47,13 +47,27 @@
     [dic setValue:[NSNumber numberWithInt:error] forKey:SDK_ERROR];
     [dic setValue:[NSNumber numberWithDouble:ajd] forKey:SDK_LOCATION_LONGITUDE];
     [dic setValue:[NSNumber numberWithDouble:awd] forKey:SDK_LOCATION_LATITUDE];
-    if(address){
-        [dic setValue:address forKey:SDK_LOCATION_ADDRESS];
+    if(result){
+        BMKReverseGeoCodeResult* addr = (BMKReverseGeoCodeResult*)result;
+        [dic setValue:[addr address] forKey:SDK_LOCATION_ADDRESS];
+        [dic setValue:[[addr addressDetail] country] forKey:SDK_LOCATION_ADDRESS_COUNTY];
+        [dic setValue:[[addr addressDetail] city] forKey:SDK_LOCATION_ADDRESS_CITY];
+        [dic setValue:[[addr addressDetail] district] forKey:SDK_LOCATION_ADDRESS_DISTRICT];
+        [dic setValue:[[addr addressDetail] streetName] forKey:SDK_LOCATION_ADDRESS_STREET];
+        [dic setValue:[[addr addressDetail] streetNumber] forKey:SDK_LOCATION_ADDRESS_STREETNUMBER];
+        [dic setValue:@"" forKey:SDK_LOCATION_ADDRESS_DETAIL];
+        [dic setValue:@"" forKey:SDK_LOCATION_ADDRESS_DESCRIBE];
     }
     else{
         [dic setValue:@"" forKey:SDK_LOCATION_ADDRESS];
+        [dic setValue:@"" forKey:SDK_LOCATION_ADDRESS_COUNTY];
+        [dic setValue:@"" forKey:SDK_LOCATION_ADDRESS_CITY];
+        [dic setValue:@"" forKey:SDK_LOCATION_ADDRESS_DISTRICT];
+        [dic setValue:@"" forKey:SDK_LOCATION_ADDRESS_STREET];
+        [dic setValue:@"" forKey:SDK_LOCATION_ADDRESS_STREETNUMBER];
+        [dic setValue:@"" forKey:SDK_LOCATION_ADDRESS_DETAIL];
+        [dic setValue:@"" forKey:SDK_LOCATION_ADDRESS_DESCRIBE];
     }
-    [dic setValue:@"" forKey:SDK_LOCATION_ADDRESS_DESCRIBE];
     [sdk notifyEventByObject:dic];
 }
 

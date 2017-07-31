@@ -8,6 +8,6 @@
 + (void) loc_start;
 + (void) loc_stop;
 + (double) loc_get_distance:(double)ajd : (double)awd : (double)bjd :(double)bwd;
-+ (void) loc_notify:(int)error : (double)ajd : (double)awd : (NSString*)address;
++ (void) loc_notify:(int)error : (double)ajd : (double)awd : (id)addr;
 @end
 #endif

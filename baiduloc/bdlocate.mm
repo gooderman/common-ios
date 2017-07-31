@@ -228,7 +228,7 @@
         double jd = location.longitude;
         double wd = location.latitude;
         NSString* addr = [result address];
-        [sdk loc_notify:0 :jd :wd :addr];
+        [sdk loc_notify:0 :jd :wd :result];
         NSLog(@"geo reverse search，true");
     }
     else {
