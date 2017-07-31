@@ -51,16 +51,18 @@
         BMKReverseGeoCodeResult* addr = (BMKReverseGeoCodeResult*)result;
         [dic setValue:[addr address] forKey:SDK_LOCATION_ADDRESS];
         [dic setValue:[[addr addressDetail] country] forKey:SDK_LOCATION_ADDRESS_COUNTY];
+        [dic setValue:[[addr addressDetail] province] forKey:SDK_LOCATION_ADDRESS_PROVINCE];
         [dic setValue:[[addr addressDetail] city] forKey:SDK_LOCATION_ADDRESS_CITY];
         [dic setValue:[[addr addressDetail] district] forKey:SDK_LOCATION_ADDRESS_DISTRICT];
         [dic setValue:[[addr addressDetail] streetName] forKey:SDK_LOCATION_ADDRESS_STREET];
         [dic setValue:[[addr addressDetail] streetNumber] forKey:SDK_LOCATION_ADDRESS_STREETNUMBER];
         [dic setValue:@"" forKey:SDK_LOCATION_ADDRESS_DETAIL];
-        [dic setValue:@"" forKey:SDK_LOCATION_ADDRESS_DESCRIBE];
+        [dic setValue:[addr sematicDescription] forKey:SDK_LOCATION_ADDRESS_DESCRIBE];
     }
     else{
         [dic setValue:@"" forKey:SDK_LOCATION_ADDRESS];
         [dic setValue:@"" forKey:SDK_LOCATION_ADDRESS_COUNTY];
+        [dic setValue:@"" forKey:SDK_LOCATION_ADDRESS_PROVINCE];
         [dic setValue:@"" forKey:SDK_LOCATION_ADDRESS_CITY];
         [dic setValue:@"" forKey:SDK_LOCATION_ADDRESS_DISTRICT];
         [dic setValue:@"" forKey:SDK_LOCATION_ADDRESS_STREET];

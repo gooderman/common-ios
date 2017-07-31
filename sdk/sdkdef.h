@@ -57,6 +57,7 @@
 #define SDK_LOCATION_ADDRESS   @"address"
 #define SDK_LOCATION_ADDRESS_DESCRIBE   @"discribe"
 #define SDK_LOCATION_ADDRESS_COUNTY   @"country"
+#define SDK_LOCATION_ADDRESS_PROVINCE   @"province"
 #define SDK_LOCATION_ADDRESS_CITY   @"city"
 #define SDK_LOCATION_ADDRESS_DISTRICT   @"district"
 #define SDK_LOCATION_ADDRESS_STREET   @"street"
