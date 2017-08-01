@@ -34,6 +34,7 @@
 #define SDK_ICONURL         @"iconurl"
 #define SDK_GENDER         @"gender"
 #define SDK_ACCESS_TOKEN    @"accessToken"
+#define SDK_REFRESH_TOKEN    @"refreshToken"
 
 //----share----
 #define SDK_SHARE_TYPE      @"type"

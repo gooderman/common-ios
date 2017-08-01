@@ -170,7 +170,7 @@
         Boolean ret = [self searchAddress: self.location.coordinate.longitude : self.location.coordinate.latitude];
         if(!ret)
         {
-            [sdk loc_notify:0 :0 :0 :nil];
+            [sdk loc_notify:1 :0 :0 :nil];
         }
     }
     else

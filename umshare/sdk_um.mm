@@ -12,6 +12,10 @@
 #import <UShareUI/UShareUI.h>
 
 @implementation sdk (um)
++ (BOOL) um_isinstall : (NSString*)name
+{
+    return [[UMSocialManager defaultManager]  isInstall:UMSocialPlatformType_WechatSession];
+}
 
 + (void) um_init : (NSDictionary*)dic
 {
@@ -67,7 +71,7 @@
         [dic setValue:usinfo.iconurl forKey:SDK_ICONURL];
         [dic setValue:usinfo.gender forKey:SDK_GENDER];
         [dic setValue:usinfo.accessToken forKey:SDK_ACCESS_TOKEN];
-        
+        [dic setValue:usinfo.refreshToken forKey:SDK_REFRESH_TOKEN];        
         [dic setValue:[NSNumber numberWithInt:0] forKey:SDK_ERROR];
     }
     else{
