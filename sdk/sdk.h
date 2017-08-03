@@ -34,6 +34,14 @@
 //+ (double) get_distance:(id)array;
 + (NSString*) get_pasteboard;
 + (void) set_pasteboard:(NSString*) str;
+//
++ (void) start_vibrator:(long)milliseconds;
++ (void) stop_vibrator;
+
+//pay init
++ (void) iospay_init:(id)data;
++ (void) iospay_req:(NSString*)pid :(int)numb :(BOOL)force;
++ (void) iospay_stop;
 //-------------------------
 + (BOOL) handle_url:(NSURL*)url;
 + (BOOL) handle_url:(NSURL*)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options;

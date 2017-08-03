@@ -65,5 +65,12 @@
 #define SDK_LOCATION_ADDRESS_STREETNUMBER   @"streetnumber"
 #define SDK_LOCATION_ADDRESS_DETAIL   @"detail"
 
+// --- 支付 ----
+#define SDK_EVT_IOSPAY          @"iospay"
+#define SDK_IOSPAY_PID          @"pid"
+#define SDK_IOSPAY_NUMB         @"numb"
+#define SDK_IOSPAY_IDENTIFER    @"identifer"
+#define SDK_IOSPAY_INFO         @"info"
+
 
 

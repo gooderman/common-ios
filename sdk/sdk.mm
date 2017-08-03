@@ -8,6 +8,7 @@
 #import "sdk.h"
 #import "sdk_audio.h"
 #include "sdk_baiduloc.h"
+#include "sdk_iospay.h"
 #include "CCLuaBridge.h"
 #import "sdk_um.h"
 //#import <sdk_wx.h>
@@ -17,11 +18,12 @@
 #ifdef __IPHONE_9_0
 #import <SafariServices/SFSafariViewController.h>
 #endif
+#import <AudioToolbox/AudioToolbox.h>
 #import "WbViewController.h"
 
 static int evthandler;
 
-static NSMutableDictionary* gDic;
+static NSMutableDictionary* gDic = nil;
 
 @interface sdk ()
 + (void) notifyEventByObject: (id) object;
@@ -232,6 +234,27 @@ static NSMutableDictionary* gDic;
     NSString* s = str;
     UIPasteboard* pasteboard = [UIPasteboard generalPasteboard];
     [pasteboard setString:s];
+}
+//
++ (void) start_vibrator:(long)milliseconds
+{
+    AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
+}
++ (void) stop_vibrator
+{
+}
+
++ (void) iospay_init:(id)data
+{
+    [sdk iap_init:data];
+}
++ (void) iospay_req:(NSString*)pid :(int)numb :(BOOL)force
+{
+    [sdk iap_req:pid :numb :force];
+}
++ (void) iospay_stop
+{
+     [sdk iap_stop];
 }
 
 //-------------------------
