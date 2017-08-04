@@ -68,6 +68,7 @@ static std::map<std::string,std::string> sMap;
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:10];
     [dic setValue:SDK_EVT_IOSPAY forKey:SDK_EVT];
     if(0==error){
+        [dic setValue:[NSNumber numberWithInt:error] forKey:SDK_ERROR];
         [dic setValue:pid forKey:SDK_IOSPAY_PID];
         [dic setValue:[NSNumber numberWithInt:numb] forKey:SDK_IOSPAY_NUMB];
         [dic setValue:identifer forKey:SDK_IOSPAY_IDENTIFER];

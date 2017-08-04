@@ -101,6 +101,11 @@ void IOSiAP_Bridge::onPaymentEvent(std::string &identifier, IOSiAPPaymentEvent e
 {
     NSString* pid = [NSString stringWithUTF8String:m_productID.c_str()];
     NSString* pidstr = [NSString stringWithUTF8String:identifier.c_str()];
+
+    if(m_isPaying==false)
+    {
+        return;
+    }
     if (event == IOSIAP_PAYMENT_PURCHASING)
     {
         NSLog(@"付款进行中");
@@ -110,34 +115,30 @@ void IOSiAP_Bridge::onPaymentEvent(std::string &identifier, IOSiAPPaymentEvent e
     else if (event == IOSIAP_PAYMENT_PURCHAED)
     {
         NSLog(@"付款成功");
+        m_payNum++;
         [sdk iap_notify:0 :pid :1 :pidstr :@"付款成功"];
-        m_isPaying = false;
-        return;
     }
     else if (event == IOSIAP_PAYMENT_FAILED)
     {
         NSLog(@"付款失败");
         [sdk iap_notify:100 :pid :1 :pidstr :@"付款失败"];
-        m_isPaying = false;
-        return;
     }
     else if (event == IOSIAP_PAYMENT_RESTORED)
     {
         NSLog(@"支付RESTORED");
         [sdk iap_notify:102 :pid :1 :pidstr :@"支付RESTORED"];
-        m_isPaying = false;
-        return;
     }
     else if (event == IOSIAP_PAYMENT_REMOVED)
     {
         //用户取消支付
         NSLog(@"取消购买");
         [sdk iap_notify:101 :pid :1 :pidstr :@"取消购买"];
-        m_isPaying = false;
-        return;
     }
-    NSLog(@"购买失败Other");
-    [sdk iap_notify:103 :pid :1 :pidstr :@"购买失败Other"];
+    else
+    {
+        NSLog(@"购买失败Other");
+        [sdk iap_notify:103 :pid :1 :pidstr :@"购买失败Other"];
+    }
     m_isPaying = false;
     return;
 }
