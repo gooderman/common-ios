@@ -35,7 +35,12 @@ static NSMutableDictionary* gDic = nil;
 
 + (UIViewController*) uivc;
 {
-    return [[[UIApplication sharedApplication] keyWindow] rootViewController];
+//    key window 不可靠并不一定是gamewindow，alert关闭以后在0.3-0.4秒内会清除keywindow
+//    在alert回调中立即添加view到keywindow，都会被清除
+//    return [[[UIApplication sharedApplication] keyWindow] rootViewController];
+//    ----------------------------------------------------------------------------
+//    return [[[UIApplication sharedApplication].delegate window] rootViewController];
+    return [[UIApplication sharedApplication].windows[0] rootViewController];
 }
 
 + (NSString*) toJsonStr:(id) object
@@ -145,7 +150,7 @@ static NSMutableDictionary* gDic = nil;
 {
     
     float sysver = [[[UIDevice currentDevice] systemVersion] floatValue];
-    if(sysver>9.0)
+    if(sysver>=9.0)
     {
         NSURL* url = [NSURL URLWithString:urlstr];//创建URL
         SFSafariViewController* sfvc = [[SFSafariViewController alloc] initWithURL:url];
