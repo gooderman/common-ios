@@ -118,9 +118,10 @@ static NSMutableDictionary* gDic = nil;
     }
 }
 
-+ (void) login:(int) type
++ (void) login:(double) type
 {
-    [sdk um_login:type];
+    int tp = (int)type;
+    [sdk um_login:tp];
 }
 
 + (void) share:(id) data
@@ -253,9 +254,10 @@ static NSMutableDictionary* gDic = nil;
 {
     [sdk iap_init:data];
 }
-+ (void) iospay_req:(NSString*)pid :(int)numb :(BOOL)force
++ (void) iospay_req:(NSString*)pid :(double)numb :(BOOL)force
 {
-    [sdk iap_req:pid :numb :force];
+    int nm = (int)numb;
+    [sdk iap_req:pid :nm :force];
 }
 + (void) iospay_stop
 {

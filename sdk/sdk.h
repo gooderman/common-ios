@@ -17,7 +17,7 @@
 
 + (void) config:(id) data;
 + (void) init:(int) handle;
-+ (void) login:(int) type;
++ (void) login:(double) type;
 + (void) share:(id) data;
 + (void) pay:(id) data;
 + (void) openBrowser:(NSString*)url;
@@ -40,7 +40,7 @@
 
 //pay init
 + (void) iospay_init:(id)data;
-+ (void) iospay_req:(NSString*)pid :(int)numb :(BOOL)force;
++ (void) iospay_req:(NSString*)pid :(double)numb :(BOOL)force;
 + (void) iospay_stop;
 //-------------------------
 + (BOOL) handle_url:(NSURL*)url;
