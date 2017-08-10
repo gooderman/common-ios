@@ -79,17 +79,19 @@
         }
         
         IOSProduct *iosProduct = new IOSProduct;
-        if(skProduct.productIdentifier==nil
-           ||skProduct.localizedTitle==nil
-           ||skProduct.localizedDescription==nil
-           )
+        if(skProduct.productIdentifier!=nil)
         {
-            continue;
+            iosProduct->productIdentifier = std::string([skProduct.productIdentifier UTF8String]);
         }
-        iosProduct->productIdentifier = std::string([skProduct.productIdentifier UTF8String]);
-        iosProduct->localizedTitle = std::string([skProduct.localizedTitle UTF8String]);
-        iosProduct->localizedDescription = std::string([skProduct.localizedDescription UTF8String]);
-        
+        if(skProduct.localizedTitle!=nil)
+        {
+            iosProduct->localizedTitle = std::string([skProduct.localizedTitle UTF8String]);
+        }
+        if(skProduct.localizedDescription!=nil)
+        {
+            iosProduct->localizedDescription = std::string([skProduct.localizedDescription UTF8String]);
+        }
+    
         // locale price to string
         NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
         [formatter setFormatterBehavior:NSNumberFormatterBehavior10_4];
