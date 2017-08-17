@@ -19,15 +19,18 @@
     // 保存录音的文件名称
     NSString *mRecordFileName;
     NSString *mRecordCafFileName;
+    NSTimeInterval recordDuration;
     
     AVAudioRecorder* s_audiorec;
     
     AVAudioSession* s_audio_session;
+    int recordResult;
 }
 
 
 + (sdk_audio *)sharedSdkAudio;
 
+- (instancetype) init;
 //0 ok
 - (BOOL) start_record:(NSString*)filename;
 

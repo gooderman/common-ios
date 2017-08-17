@@ -36,6 +36,14 @@
     return instance;
 }
 
+- (instancetype) init
+{
+    [super init];
+    recordDuration = 0;
+    recordResult = 0;
+    return self;
+}
+
 - (BOOL) start_record:(NSString*)filename
 {
     if(mRecordFileName){
@@ -121,6 +129,10 @@
         return false;
     }
     
+    recordResult = 0;
+    
+    [self start_convert];
+    
     return true;
 }
 
@@ -129,6 +141,8 @@
     if(s_audiorec)
     {
         if([s_audiorec isRecording]){
+            recordDuration = [s_audiorec currentTime];
+            NSLog(@"停止录音: %f",recordDuration);
             [s_audiorec stop];
         }
     }
@@ -209,45 +223,211 @@
     return YES;
 }
 
+//- (void)audioRecorderDidFinishRecording:(AVAudioRecorder *)recorder successfully:(BOOL)flag
+//{
+//    NSLog(@"录音完成 finish: %d", flag);
+//
+//    dispatch_async(dispatch_get_global_queue(0, 0),^{
+//
+//        //进入另一个线程
+//        // sleep(time+1);
+//        NSLog(@"录音完成 开始转换为mp3文件: %@", mRecordFileName);
+//
+//        NSFileManager *manager = [NSFileManager defaultManager];
+//        if ([manager fileExistsAtPath:mRecordCafFileName]) {
+//            [self pcm_to_mp3:mRecordCafFileName andDesPath:mRecordFileName];
+//        }
+//
+//        dispatch_async(dispatch_get_main_queue(),^{
+//            //返回主线程
+//            NSNumber* error=[NSNumber numberWithInt:1];
+//            if(flag){
+//                NSFileManager *manager = [NSFileManager defaultManager];
+//                if ([manager fileExistsAtPath:mRecordFileName]) {
+//                    error=[NSNumber numberWithInt:0];
+//                }
+//            }
+//
+//            NSLog(@"录音完成 发送stop通知");
+//            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:10];
+//            [dic setValue:SDK_EVT_RECORD forKey:SDK_EVT];
+//            [dic setValue:error forKey:SDK_ERROR];
+//            [dic setValue:@"stoped" forKey:SDK_RECORD_STATE];
+//            [dic setValue:mRecordFileName forKey:SDK_RECORD_FILENAME];
+//            [dic setValue:[NSNumber numberWithDouble:recordDuration] forKey:SDK_RECORD_DURATION];
+//
+//
+//            [sdk notifyEventByObject:dic];
+//
+//        });
+//    });
+//
+//}
+//
+///* if an error occurs while encoding it will be reported to the delegate. */
+//- (void)audioRecorderEncodeErrorDidOccur:(AVAudioRecorder *)recorder error:(NSError * __nullable)error
+//{
+//    NSLog(@"录音出错 encode error: %@", error);
+//
+//    NSNumber* ret_error= [NSNumber numberWithInt:error.code];
+//    NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:10];
+//    [dic setValue:SDK_EVT_RECORD forKey:SDK_EVT];
+//    [dic setValue:ret_error forKey:SDK_ERROR];
+//    [dic setValue:@"stoped" forKey:SDK_RECORD_STATE];
+//    [dic setValue:mRecordFileName forKey:SDK_RECORD_FILENAME];
+//    [dic setValue:[NSNumber numberWithDouble:0] forKey:SDK_RECORD_DURATION];
+//
+//    [sdk notifyEventByObject:dic];
+//
+//}
 
 
-
-- (void)audioRecorderDidFinishRecording:(AVAudioRecorder *)recorder successfully:(BOOL)flag
+- (void)start_convert
 {
-    NSLog(@"录音完成 finish: %d", flag);
+    NSLog(@"开始转换线程");
     
     dispatch_async(dispatch_get_global_queue(0, 0),^{
         
         //进入另一个线程
         // sleep(time+1);
-        NSLog(@"录音完成 开始转换为mp3文件: %@", mRecordFileName);
+        NSLog(@"开始转换为mp3文件: %@", mRecordFileName);
         
-        NSFileManager *manager = [NSFileManager defaultManager];
-        if ([manager fileExistsAtPath:mRecordCafFileName]) {
-            [self pcm_to_mp3:mRecordCafFileName andDesPath:mRecordFileName];
+        lame_t lame = lame_init();
+        lame_set_in_samplerate(lame, 44100.0);
+        lame_set_VBR(lame, vbr_default);
+        lame_init_params(lame);
+        
+        FILE *pcm = fopen([mRecordCafFileName cStringUsingEncoding:1],  "rb"); // source 被转换的音频文件位置
+        FILE *mp3 = fopen([mRecordFileName cStringUsingEncoding:1], "wb"); // output 输出生成的Mp3文件位置
+        
+        bool flag = pcm && mp3;
+        
+        if(!flag)
+        {
+            NSLog(@"转换失败，打开文件失败");
+            dispatch_async(dispatch_get_main_queue(),^{
+                //返回主线程
+                [self stop_record];
+                if(recordResult>=0)
+                {
+                    NSNumber* error=[NSNumber numberWithInt:1];
+                    NSLog(@"转换失败 发送stop通知");
+                    NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:10];
+                    [dic setValue:SDK_EVT_RECORD forKey:SDK_EVT];
+                    [dic setValue:error forKey:SDK_ERROR];
+                    [dic setValue:@"stoped" forKey:SDK_RECORD_STATE];
+                    [dic setValue:mRecordFileName forKey:SDK_RECORD_FILENAME];
+                    [dic setValue:[NSNumber numberWithDouble:recordDuration] forKey:SDK_RECORD_DURATION];
+                    [sdk notifyEventByObject:dic];
+                }
+                
+            });
+            return;
         }
         
-        dispatch_async(dispatch_get_main_queue(),^{
-            //返回主线程
-            NSNumber* error=[NSNumber numberWithInt:1];
-            if(flag){
-                NSFileManager *manager = [NSFileManager defaultManager];
-                if ([manager fileExistsAtPath:mRecordFileName]) {
-                    error=[NSNumber numberWithInt:0];
-                }
+        long skip = 0;
+        const int PCM_HEAD_SKIP = 4 * 1024;
+        const int PCM_SIZE = 8192;
+        const int MP3_SIZE = 8192;
+        short int pcm_buffer[PCM_SIZE * 2];
+        unsigned char mp3_buffer[MP3_SIZE];
+        while(true)
+        {
+            bool isstop = true;
+            if([s_audiorec isRecording])
+            {
+                isstop = false;
             }
             
-            NSLog(@"录音完成 发送stop通知");
-            NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:10];
-            [dic setValue:SDK_EVT_RECORD forKey:SDK_EVT];
-            [dic setValue:error forKey:SDK_ERROR];
-            [dic setValue:@"stoped" forKey:SDK_RECORD_STATE];
-            [dic setValue:mRecordFileName forKey:SDK_RECORD_FILENAME];
+            int read, write;
+            fseek(pcm,0,SEEK_END);
+            long length = ftell(pcm);
+            if(length<=PCM_HEAD_SKIP)
+            {
+                if(isstop)
+                {
+                    break;
+                }
+                [NSThread sleepForTimeInterval:0.02f];
+                continue;
+            }
+            if(skip==0)
+            {
+                skip = PCM_HEAD_SKIP;
+            }
+            if(length-skip < PCM_SIZE * 2 * sizeof(short int))
+            {
+                if(!isstop)
+                {
+                    [NSThread sleepForTimeInterval:0.05f];
+                    continue;
+                }
+            }
+            fseek(pcm,skip,SEEK_SET);
+            read = (int)fread(pcm_buffer, 2 * sizeof(short int), PCM_SIZE, pcm);
+            if(read>0)
+            {
+                write = lame_encode_buffer_interleaved(lame, pcm_buffer, read, mp3_buffer, MP3_SIZE);
+                fwrite(mp3_buffer, write, 1, mp3);
+                skip = ftell(pcm);
+            }
+            else if(isstop)
+            {
+               break;
+            }
             
-            [sdk notifyEventByObject:dic];
+        }
+        
+        if(mp3)
+        {
+            int write = lame_encode_flush(lame, mp3_buffer, MP3_SIZE);
+            fwrite(mp3_buffer, write, 1, mp3);
+            fclose(mp3);
+        }
+        if(pcm)
+        {
+            fclose(pcm);
+        }
+        lame_close(lame);
+        
+        NSLog(@"结束转换");
+        dispatch_async(dispatch_get_main_queue(),^{
+            //返回主线程
+            if(recordResult>=0)
+            {
+                NSNumber* error=[NSNumber numberWithInt:1];
+                if(recordResult>=0){
+                    NSFileManager *manager = [NSFileManager defaultManager];
+                    if ([manager fileExistsAtPath:mRecordFileName]) {
+                        error=[NSNumber numberWithInt:recordResult];
+                    }
+                }
+                NSLog(@"转换完成 发送stop通知");
+                NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:10];
+                [dic setValue:SDK_EVT_RECORD forKey:SDK_EVT];
+                [dic setValue:error forKey:SDK_ERROR];
+                [dic setValue:@"stoped" forKey:SDK_RECORD_STATE];
+                [dic setValue:mRecordFileName forKey:SDK_RECORD_FILENAME];
+                [dic setValue:[NSNumber numberWithDouble:recordDuration] forKey:SDK_RECORD_DURATION];
+                [sdk notifyEventByObject:dic];
+            }
             
         });
     });
+    
+}
+- (void)audioRecorderDidFinishRecording:(AVAudioRecorder *)recorder successfully:(BOOL)flag
+{
+    NSLog(@"录音完成 finish: %d", flag);
+    
+    if(flag)
+    {
+        recordResult = 0;
+    }
+    else
+    {
+        recordResult = 1;
+    }
     
 }
 
@@ -255,13 +435,14 @@
 - (void)audioRecorderEncodeErrorDidOccur:(AVAudioRecorder *)recorder error:(NSError * __nullable)error
 {
     NSLog(@"录音出错 encode error: %@", error);
-    
+    recordResult = -1;
     NSNumber* ret_error= [NSNumber numberWithInt:error.code];
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:10];
     [dic setValue:SDK_EVT_RECORD forKey:SDK_EVT];
     [dic setValue:ret_error forKey:SDK_ERROR];
     [dic setValue:@"stoped" forKey:SDK_RECORD_STATE];
     [dic setValue:mRecordFileName forKey:SDK_RECORD_FILENAME];
+    [dic setValue:[NSNumber numberWithDouble:0] forKey:SDK_RECORD_DURATION];
     
     [sdk notifyEventByObject:dic];
     

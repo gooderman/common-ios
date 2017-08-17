@@ -50,6 +50,7 @@
 #define SDK_EVT_RECORD       @"record"
 #define SDK_RECORD_FILENAME  @"filename"
 #define SDK_RECORD_STATE     @"state"
+#define SDK_RECORD_DURATION  @"duration"
 
 // --- 定位 ----
 #define SDK_EVT_LOCATION       @"locate"
