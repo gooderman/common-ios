@@ -23,7 +23,17 @@
     [[UMSocialManager defaultManager] openLog:YES];
     
     //设置友盟appkey
-    [[UMSocialManager defaultManager] setUmSocialAppkey:[dic valueForKey:TOKEN_UM_APPKEY]];
+//    [[UMSocialManager defaultManager] setUmSocialAppkey:[dic valueForKey:TOKEN_UM_APPKEY]];
+    
+    NSString* key = [dic valueForKey:TOKEN_UM_APPKEY];
+    if(key==nil)
+    {
+        key = [[[NSBundle mainBundle] infoDictionary] objectForKey:TOKEN_UM_APPKEY];
+        NSLog(@"sdk um_init %@ empty",TOKEN_UM_APPKEY);
+        return;
+    }
+    //设置友盟appkey
+    [[UMSocialManager defaultManager] setUmSocialAppkey:key];
     
     // 获取友盟social版本号
     NSLog(@"UMeng social version: %@", [UMSocialGlobal umSocialSDKVersion]);

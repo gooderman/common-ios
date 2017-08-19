@@ -23,6 +23,7 @@
 #define TOKEN_WX_APPKEY @"wxappkey"
 #define TOKEN_WX_APPSECRET @"wxappsecret"
 #define TOKEN_BD_LOCKEY @"baidulockey"
+#define TOKEN_RECORD_DURATION_LIMIT  @"record_duration_limit"
 
 /////---------------------------
 #define SDK_ERROR           @"error"

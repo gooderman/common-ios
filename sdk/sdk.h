@@ -22,12 +22,12 @@
 + (void) pay:(id) data;
 + (void) openBrowser:(NSString*)url;
 
-
++ (BOOL) init_record:(id) data;
 + (BOOL) start_record:(id) data;
 + (void) stop_record;
 + (int) record_getVolume;
 
-
++ (void) init_locate;
 + (void) start_locate;
 + (void) stop_locate;
 + (double) get_distance:(double)alongitude :(double)alatitude :(double)blongitude :(double) blatitude;

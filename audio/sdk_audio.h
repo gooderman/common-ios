@@ -25,12 +25,17 @@
     
     AVAudioSession* s_audio_session;
     int recordResult;
+    int convertSt;
+    float limitDuration;
 }
 
 
 + (sdk_audio *)sharedSdkAudio;
 
 - (instancetype) init;
+
+//0 ok
+- (BOOL) init_record:(id)dic;
 //0 ok
 - (BOOL) start_record:(NSString*)filename;
 

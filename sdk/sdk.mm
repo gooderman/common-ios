@@ -97,7 +97,8 @@ static NSMutableDictionary* gDic = nil;
     if(gDic)
     {
         [sdk um_init:gDic];
-        [sdk loc_init:gDic];
+//        [sdk loc_init:gDic];
+        [sdk init_record:gDic];
     }
     else
     {
@@ -164,7 +165,11 @@ static NSMutableDictionary* gDic = nil;
     }
     
 }
-
++ (BOOL) init_record:(id) dic;
+{
+    [[sdk_audio sharedSdkAudio] init_record:dic];
+    return YES;
+}
 + (BOOL) start_record:(id) data
 {
     NSDictionary* dic = (NSDictionary*)data;
@@ -180,6 +185,14 @@ static NSMutableDictionary* gDic = nil;
 + (int) record_getVolume
 {
    return [[sdk_audio sharedSdkAudio] record_getVolume];
+}
+
++ (void) init_locate
+{
+    if(gDic)
+    {
+       [sdk loc_init:gDic];
+    }
 }
 
 + (void) start_locate;

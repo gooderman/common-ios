@@ -9,9 +9,16 @@
 #include "sdk.h"
 #include "sdk_baiduloc.h"
 #import "bdlocate.h"
+static bool s_lcoation_init = false;
 @implementation sdk (um)
 + (void) loc_init: (NSDictionary*)dic
 {
+    if(s_lcoation_init)
+    {
+        NSLog(@"sdk loc_init already");
+        return;
+    }
+    s_lcoation_init = true;
     NSString* key = [dic valueForKey:TOKEN_BD_LOCKEY];
     if(key==nil)
     {

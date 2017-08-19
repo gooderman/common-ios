@@ -41,7 +41,28 @@
     [super init];
     recordDuration = 0;
     recordResult = 0;
+    convertSt = 0;
+    limitDuration = 60.0;
     return self;
+}
+
+- (BOOL) init_record:(id)dic
+{
+    id key = [dic valueForKey:TOKEN_RECORD_DURATION_LIMIT];
+    if(key!=nil && [key isKindOfClass:[NSNumber class]])
+    {
+        NSNumber* duration = key;
+        limitDuration = [duration doubleValue];
+        if(limitDuration<1.0)
+        {
+            limitDuration = 1.0;
+        }
+    }
+    else
+    {
+        NSLog(@"sdk init_record %@ empty",TOKEN_RECORD_DURATION_LIMIT);
+    }
+    return YES;
 }
 
 - (BOOL) start_record:(NSString*)filename
@@ -54,6 +75,9 @@
     
     if(s_audiorec){
         if([s_audiorec isRecording]){
+            return false;
+        }
+        if(convertSt>0){
             return false;
         }
         [s_audiorec dealloc];
@@ -285,7 +309,7 @@
 - (void)start_convert
 {
     NSLog(@"开始转换线程");
-    
+    convertSt = 1;
     dispatch_async(dispatch_get_global_queue(0, 0),^{
         
         //进入另一个线程
@@ -322,6 +346,7 @@
                 }
                 
             });
+            convertSt = 0;
             return;
         }
         
@@ -337,6 +362,13 @@
             if([s_audiorec isRecording])
             {
                 isstop = false;
+                recordDuration = [s_audiorec currentTime];
+                if(recordDuration>limitDuration)
+                {
+                    NSLog(@"录音超时 停止录音");
+                    [self stop_record];
+                    isstop = true;
+                }
             }
             
             int read, write;
@@ -411,6 +443,8 @@
                 [dic setValue:[NSNumber numberWithDouble:recordDuration] forKey:SDK_RECORD_DURATION];
                 [sdk notifyEventByObject:dic];
             }
+            
+            convertSt = 0;
             
         });
     });
