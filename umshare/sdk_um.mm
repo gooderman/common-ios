@@ -91,6 +91,30 @@
     [sdk notifyEventByObject: dic];
 }
 
++(UIImage*)um_image_scale:(UIImage*)image scale:(float)scale
+{
+    
+    CGSize size = image.size;
+    
+    CGFloat width = size.width;
+    
+    CGFloat height=size.height;
+    
+    CGFloat scaledWidth = width*scale;
+    
+    CGFloat scaledHeight = height*scale;
+    
+    UIGraphicsBeginImageContext(size);//thiswillcrop
+    
+    [image drawInRect:CGRectMake(0,0,scaledWidth,scaledHeight)];
+    
+    UIImage*newImage=UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    return newImage;
+
+}
+
 typedef void(^UM_SHARE)(UMSocialPlatformType platformType, NSDictionary *userInfo);
 + (void) um_share:(int) type Title:(NSString*)title Text:(NSString*)text Img:(NSString*)img Url:(NSString*)url
 {
@@ -121,7 +145,10 @@ typedef void(^UM_SHARE)(UMSocialPlatformType platformType, NSDictionary *userInf
             UMShareImageObject *shareObject = [[UMShareImageObject alloc] init];
             shareObject.shareImage = [UIImage imageWithContentsOfFile:img];
             //如果有缩略图，则设置缩略图
-            shareObject.thumbImage = [UIImage imageNamed:@"Icon.png"];
+//            shareObject.thumbImage = [UIImage imageNamed:@"Icon.png"];
+//            shareObject.thumbImage = [sdk um_image_scale:shareObject.shareImage scale:0.5];
+            shareObject.thumbImage = [UIImage imageWithContentsOfFile:img];
+            
             shareObject.title = title;
             shareObject.descr = text;
             

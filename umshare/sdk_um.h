@@ -16,6 +16,7 @@
 
 + (void) um_login_notify:(NSError*) error Data:(id)data;
 + (void) um_share_nofity:(NSError*) error Data:(id)data;
++(UIImage*)um_image_scale:(UIImage*)image scale:(float)scale;
 
 + (BOOL) um_handle_url:(NSURL*)url;
 + (BOOL) um_handle_url:(NSURL*)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options;
