@@ -275,6 +275,12 @@ static unsigned long long us_uptime()
          @"iPhone9,3" : @"iPhone 7",
          @"iPhone9,2" : @"iPhone 7 Plus",
          @"iPhone9,4" : @"iPhone 7 Plus",
+         @"iPhone10,1" : @"iPhone 8",
+         @"iPhone10,4" : @"iPhone 8",
+         @"iPhone10,2" : @"iPhone 8 Plus",
+         @"iPhone10,5" : @"iPhone 8 Plus",
+         @"iPhone10,3" : @"iPhone X",
+         @"iPhone10,6" : @"iPhone X",
          
          //iPad
          @"iPad1,1" : @"iPad",
