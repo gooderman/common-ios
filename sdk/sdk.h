@@ -38,6 +38,10 @@
 + (void) start_vibrator:(long)milliseconds;
 + (void) stop_vibrator;
 
+//save image
++ (void) save_image_album:(NSString*) str;
+
+
 //pay init
 + (void) iospay_init:(id)data;
 + (void) iospay_req:(NSString*)pid :(double)numb :(BOOL)force;

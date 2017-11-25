@@ -30,6 +30,7 @@
 #define SDK_EVT             @"evt"
 #define SDK_EVT_LOGIN       @"login"
 #define SDK_EVT_SHARE       @"share"
+#define SDK_EVT_SAVE_IMAGE       @"saveimage"
 #define SDK_OPENID          @"openid"
 #define SDK_NAME            @"name"
 #define SDK_ICONURL         @"iconurl"

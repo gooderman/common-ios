@@ -21,7 +21,7 @@ public:
     int requestProducts(std::string& productId,std::map<std::string,std::string>& product);
     virtual void onRequestProductsFinish(void);
     virtual void onRequestProductsError(int code);
-    virtual void onPaymentEvent(std::string &identifier, IOSiAPPaymentEvent event, int quantity);
+    virtual void onPaymentEvent(std::string &identifier, IOSiAPPaymentEvent event, int quantity,SKPaymentTransaction *transaction);
     void    sharPayCallBack(int result);
     bool isBusy();
 private:

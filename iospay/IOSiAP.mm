@@ -11,7 +11,6 @@
     for (SKPaymentTransaction *transaction in transactions) {
         std::string identifier([transaction.payment.productIdentifier UTF8String]);
         IOSiAPPaymentEvent event;
-        
         switch (transaction.transactionState) {
             case SKPaymentTransactionStatePurchasing:
                 event = IOSIAP_PAYMENT_PURCHASING;
@@ -30,7 +29,7 @@
         }
         if(_iosiap && _iosiap->delegate)
         {
-            _iosiap->delegate->onPaymentEvent(identifier, event, transaction.payment.quantity);
+            _iosiap->delegate->onPaymentEvent(identifier, event, transaction.payment.quantity, transaction);
         }
         if (event != IOSIAP_PAYMENT_PURCHASING) {
             [[SKPaymentQueue defaultQueue] finishTransaction: transaction];
@@ -44,7 +43,7 @@
         std::string identifier([transaction.payment.productIdentifier UTF8String]);
         if(_iosiap && _iosiap->delegate)
         {
-            _iosiap->delegate->onPaymentEvent(identifier, IOSIAP_PAYMENT_REMOVED, transaction.payment.quantity);
+            _iosiap->delegate->onPaymentEvent(identifier, IOSIAP_PAYMENT_REMOVED, transaction.payment.quantity,transaction);
         }
     }
 }

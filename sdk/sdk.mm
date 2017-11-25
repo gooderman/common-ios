@@ -11,6 +11,7 @@
 #include "sdk_iospay.h"
 #include "CCLuaBridge.h"
 #import "sdk_um.h"
+#import "sdk_album.h"
 //#import <sdk_wx.h>
 #import <UIkit/UIWebView.h>
 #import <UIKit/UIButton.h>
@@ -261,6 +262,11 @@ static NSMutableDictionary* gDic = nil;
 }
 + (void) stop_vibrator
 {
+}
+//
++ (void) save_image_album:(NSString*) str
+{
+    [sdk ab_save_image:str Name:NULL];
 }
 
 + (void) iospay_init:(id)data

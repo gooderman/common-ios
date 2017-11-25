@@ -104,6 +104,9 @@
     
     CGFloat scaledHeight = height*scale;
     
+    size.width = scaledWidth;
+    size.height = scaledHeight;
+    
     UIGraphicsBeginImageContext(size);//thiswillcrop
     
     [image drawInRect:CGRectMake(0,0,scaledWidth,scaledHeight)];

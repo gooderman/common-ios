@@ -97,7 +97,7 @@ void IOSiAP_Bridge::onRequestProductsError(int code)
     m_isPaying = false;
 }
 
-void IOSiAP_Bridge::onPaymentEvent(std::string &identifier, IOSiAPPaymentEvent event, int quantity)
+void IOSiAP_Bridge::onPaymentEvent(std::string &identifier, IOSiAPPaymentEvent event, int quantity,SKPaymentTransaction *transaction)
 {
     NSString* pid = [NSString stringWithUTF8String:m_productID.c_str()];
     NSString* pidstr = [NSString stringWithUTF8String:identifier.c_str()];
@@ -116,7 +116,20 @@ void IOSiAP_Bridge::onPaymentEvent(std::string &identifier, IOSiAPPaymentEvent e
     {
         NSLog(@"付款成功");
         m_payNum++;
-        [sdk iap_notify:0 :pid :1 :pidstr :@"付款成功"];
+        NSData *receiptData;
+        if (NSFoundationVersionNumber >= NSFoundationVersionNumber_iOS_7_0) {
+            receiptData = [NSData dataWithContentsOfURL:[[NSBundle mainBundle] appStoreReceiptURL]];
+        } else {
+            receiptData = transaction.transactionReceipt;
+        }
+        if(!receiptData)
+        {
+            
+        }
+        else
+        {
+            [sdk iap_notify:0 :pid :1 :pidstr :@"付款成功"];
+        }
     }
     else if (event == IOSIAP_PAYMENT_FAILED)
     {

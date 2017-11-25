@@ -41,7 +41,7 @@ public:
     virtual void onRequestProductsFinish(void) = 0;
     virtual void onRequestProductsError(int code) = 0;
     // for payment
-    virtual void onPaymentEvent(std::string &identifier, IOSiAPPaymentEvent event, int quantity) = 0;
+    virtual void onPaymentEvent(std::string &identifier, IOSiAPPaymentEvent event, int quantity,SKPaymentTransaction *transaction) = 0;
 };
 
 @interface iAPTransactionObserver : NSObject<SKPaymentTransactionObserver,SKProductsRequestDelegate>
