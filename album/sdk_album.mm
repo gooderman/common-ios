@@ -62,7 +62,7 @@
         msg = @"保存图片成功" ;
     }
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:msg preferredStyle:UIAlertControllerStyleAlert];
-    [[sdk uivc] presentViewController:alert animated:YES completion:nil];
+    [[sdk uivc] presentViewController:alert animated:NO completion:nil];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [alert dismissViewControllerAnimated:YES completion:^{
