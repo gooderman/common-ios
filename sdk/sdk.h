@@ -21,6 +21,7 @@
 + (void) share:(id) data;
 + (void) pay:(id) data;
 + (void) openBrowser:(NSString*)url;
++ (void) openBrowserByWebview:(NSString*)url;
 
 + (BOOL) init_record:(id) data;
 + (BOOL) start_record:(id) data;

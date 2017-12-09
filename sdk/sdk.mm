@@ -157,6 +157,16 @@ static NSMutableDictionary* gDic = nil;
     {
         NSURL* url = [NSURL URLWithString:urlstr];//创建URL
         SFSafariViewController* sfvc = [[SFSafariViewController alloc] initWithURL:url];
+        if (@available(iOS 11.0, *)) {
+//            [sdk uivc] 使用window[0] 即gamewindow，alert是新的window，从alert返回后立即调用因w0还不是keywindow导致空白
+            UIWindow * w0 = [UIApplication sharedApplication].windows[0];
+            UIWindow * wk = [UIApplication sharedApplication].keyWindow;
+            if(w0!=wk){
+                dispatch_async(dispatch_get_main_queue(),^{
+                    [w0 makeKeyWindow];
+                });
+            }
+        }
         [[sdk uivc] presentViewController:sfvc animated:YES completion:nil];
     }
     else
@@ -164,9 +174,16 @@ static NSMutableDictionary* gDic = nil;
         WbViewController* wbvc =  [WbViewController create:urlstr];
         [[sdk uivc] presentViewController:wbvc animated:YES completion:nil];
     }
-    
+
 }
-+ (BOOL) init_record:(id) dic;
+
++ (void) openBrowserByWebview:(NSString*)urlstr
+{
+    WbViewController* wbvc =  [WbViewController create:urlstr];
+    [[sdk uivc] presentViewController:wbvc animated:YES completion:nil];
+}
+
++ (BOOL) init_record:(id) dic
 {
     [[sdk_audio sharedSdkAudio] init_record:dic];
     return YES;
