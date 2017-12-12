@@ -40,21 +40,21 @@
     
     //设置微信的appKey和appSecret
     [[UMSocialManager defaultManager] setPlaform:UMSocialPlatformType_WechatSession appKey:[dic valueForKey:TOKEN_WX_APPKEY] appSecret:[dic valueForKey:TOKEN_WX_APPSECRET] redirectURL:nil];
-
     
     // 如果不想显示平台下的某些类型，可用以下接口设置
     [[UMSocialManager defaultManager] removePlatformProviderWithPlatformTypes:@[
-                                                                                
+
                                                                                 @(UMSocialPlatformType_QQ),
-                                                                                @(UMSocialPlatformType_Qzone),             @(UMSocialPlatformType_TencentWb),
-                                                                                @(UMSocialPlatformType_Facebook),@(UMSocialPlatformType_WechatFavorite),
-                                                                                
+                                                                                @(UMSocialPlatformType_Qzone),            @(UMSocialPlatformType_TencentWb),
+                                                                                @(UMSocialPlatformType_Facebook),
+                                                                                @(UMSocialPlatformType_WechatFavorite),
                                                                                 @(UMSocialPlatformType_Sms),
                                                                                 @(UMSocialPlatformType_Email),
                                                                                 @(UMSocialPlatformType_Renren),
                                                                                 @(UMSocialPlatformType_Douban),
-                                                                                @(UMSocialPlatformType_Flickr),                                                                                @(UMSocialPlatformType_Twitter),
-                                                                                @(UMSocialPlatformType_YixinTimeLine),@(UMSocialPlatformType_LaiWangTimeLine),
+                                                                                @(UMSocialPlatformType_Flickr),                                                                            @(UMSocialPlatformType_Twitter),
+                                                                                @(UMSocialPlatformType_YixinTimeLine),
+                                                                                @(UMSocialPlatformType_LaiWangTimeLine),
                                                                                 @(UMSocialPlatformType_Linkedin),
                                                                                 @(UMSocialPlatformType_AlipaySession)]
                                                                                 ];
@@ -65,15 +65,16 @@
     UMSocialPlatformType platformType = (UMSocialPlatformType)p;
     UIViewController* vc = [sdk uivc];
     [[UMSocialManager defaultManager]  getUserInfoWithPlatform:platformType currentViewController:vc completion:^(id result, NSError *error) {
-        [sdk um_login_notify: error Data:result];
+        [sdk um_login_notify: error Platform:p Data:result];
     }];
 
 }
 
-+(void) um_login_notify:(NSError*) error Data:(id) data
++(void) um_login_notify:(NSError*) error Platform:(int)plat Data:(id) data
 {
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:10];
     [dic setValue:SDK_EVT_LOGIN forKey:SDK_EVT];
+    [dic setValue:[NSNumber numberWithInt:plat] forKey:SDK_SHARE_TYPE];
     if(nil==error){
         UMSocialUserInfoResponse *usinfo = data;
         [dic setValue:usinfo.openid forKey:SDK_OPENID];
@@ -167,9 +168,9 @@ typedef void(^UM_SHARE)(UMSocialPlatformType platformType, NSDictionary *userInf
             messageObject.shareObject = shareObject;
         }
         //调用分享接口
-        auto vc= [sdk uivc];
-        [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:vc completion:^(id data, NSError *error) {
-            [sdk um_share_nofity:error Data:data];
+        UIViewController* vc= [sdk uivc];
+        [[UMSocialManager defaultManager] shareToPlatform:platformType messageObject:messageObject currentViewController:vc completion: ^(id data, NSError *error) {
+            [sdk um_share_nofity:error Platform:platformType Data:data];
         }];
     };
 
@@ -184,10 +185,11 @@ typedef void(^UM_SHARE)(UMSocialPlatformType platformType, NSDictionary *userInf
     }
 }
 
-+(void) um_share_nofity:(NSError*) error Data:(id)data
++(void) um_share_nofity:(NSError*) error Platform:(int)plat Data:(id)data
 {
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithCapacity:10];
     [dic setValue:SDK_EVT_SHARE forKey:SDK_EVT];
+    [dic setValue:[NSNumber numberWithInt:plat] forKey:SDK_SHARE_TYPE];
     if(nil==error){
         [dic setValue:[NSNumber numberWithInt:0] forKey:SDK_ERROR];
     }

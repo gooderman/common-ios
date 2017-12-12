@@ -43,7 +43,6 @@ static NSMutableDictionary* gDic = nil;
 //    return [[[UIApplication sharedApplication].delegate window] rootViewController];
     return [[UIApplication sharedApplication].windows[0] rootViewController];
 }
-
 + (NSString*) toJsonStr:(id) object
 {
     NSString* jsonStr =nil;
@@ -308,7 +307,14 @@ static NSMutableDictionary* gDic = nil;
 
 + (BOOL) handle_url:(NSURL*)url options:(NSDictionary<UIApplicationOpenURLOptionsKey, id> *)options
 {
-    return [sdk um_handle_url:url options:options];
+//    if ([options[UIApplicationOpenURLOptionsSourceApplicationKey] isEqualToString:@"com.tencent.xin"] && [url.absoluteString containsString:@"pay"]) {
+//        return [WXApi handleOpenURL:url delegate:[WXApiManager sharedManager]];
+//    }
+//    else
+    {
+        return [sdk um_handle_url:url options:options];
+    }
+    
 }
 
 + (BOOL) handle_url:(NSURL*)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation

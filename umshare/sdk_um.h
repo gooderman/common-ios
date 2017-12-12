@@ -14,8 +14,8 @@
 + (void) um_login:(int) type;
 + (void) um_share:(int) type Title:(NSString*)title Text:(NSString*)text Img:(NSString*)img Url:(NSString*)url;
 
-+ (void) um_login_notify:(NSError*) error Data:(id)data;
-+ (void) um_share_nofity:(NSError*) error Data:(id)data;
++ (void) um_login_notify:(NSError*) error Platform:(int)plat Data:(id)data;
++ (void) um_share_nofity:(NSError*) error Platform:(int)plat Data:(id)data;
 +(UIImage*)um_image_scale:(UIImage*)image scale:(float)scale;
 
 + (BOOL) um_handle_url:(NSURL*)url;
