@@ -127,6 +127,10 @@ static NSMutableDictionary* gDic = nil;
 
 + (void) share:(id) data
 {
+    if(![data isKindOfClass:[NSDictionary class]])
+    {
+        return;
+    }
     NSDictionary* dic = (NSDictionary*)data;
     NSNumber* type = [dic valueForKey:SDK_SHARE_TYPE];
     NSString* title = [dic valueForKey:SDK_SHARE_TITLE];
@@ -139,7 +143,7 @@ static NSMutableDictionary* gDic = nil;
     if(!text)   text=@"";
     if(!image)  image=@"";
     if(!url)    url=@"";
-
+    
     [sdk um_share:[type intValue] Title:title Text:text Img:image Url:url];
 }
 
@@ -267,9 +271,11 @@ static NSMutableDictionary* gDic = nil;
 
 + (void) set_pasteboard:(NSString*) str
 {
-    NSString* s = str;
-    UIPasteboard* pasteboard = [UIPasteboard generalPasteboard];
-    [pasteboard setString:s];
+    if(str)
+    {
+        UIPasteboard* pasteboard = [UIPasteboard generalPasteboard];
+        [pasteboard setString:str];
+    }
 }
 //
 + (void) start_vibrator:(long)milliseconds

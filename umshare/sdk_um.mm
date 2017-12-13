@@ -21,6 +21,7 @@
 {
     //打开调试日志
     [[UMSocialManager defaultManager] openLog:YES];
+    [UMSocialGlobal shareInstance].isClearCacheWhenGetUserInfo = NO;
     
     //设置友盟appkey
 //    [[UMSocialManager defaultManager] setUmSocialAppkey:[dic valueForKey:TOKEN_UM_APPKEY]];
@@ -194,11 +195,47 @@ typedef void(^UM_SHARE)(UMSocialPlatformType platformType, NSDictionary *userInf
         [dic setValue:[NSNumber numberWithInt:0] forKey:SDK_ERROR];
     }
     else{
-        [dic setValue:[NSNumber numberWithInt:1] forKey:SDK_ERROR];
+        int err = 1;
+        if(error.code == UMSocialPlatformErrorType_Cancel)
+        {
+            err=2;
+        }
+        [dic setValue:[NSNumber numberWithInt:err] forKey:SDK_ERROR];
     }
     [sdk notifyEventByObject: dic];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [sdk um_share_alert:error];
+    });
 }
 
++ (void)um_share_alert:(NSError *)error
+{
+    NSString *result = nil;
+    if (!error) {
+        result = [NSString stringWithFormat:@"分享成功"];
+    }
+    else{
+        NSMutableString *str = [NSMutableString string];
+        if (error.userInfo) {
+            for (NSString *key in error.userInfo) {
+                [str appendFormat:@"%@ = %@\n", key, error.userInfo[key]];
+            }
+        }
+        if (error) {
+            result = [NSString stringWithFormat:@"分享失败: %d\n%@",(int)error.code, str];
+        }
+        else{
+            result = [NSString stringWithFormat:@"分享失败"];
+        }
+    }
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"分享" message:result preferredStyle:UIAlertControllerStyleAlert];
+    [[sdk uivc] presentViewController:alert animated:NO completion:nil];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [alert dismissViewControllerAnimated:YES completion:^{
+            
+        }];
+    });
+}
 
 + (BOOL) um_handle_url:(NSURL*)url
 {
