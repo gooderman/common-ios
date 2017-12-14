@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "sdk.h"
 @interface sdk (um)
++ (void) um_set_sharealert : (int)flag;
 + (BOOL) um_isinstall : (NSString*)name;
 + (void) um_init : (NSDictionary*)dic;
 + (void) um_login:(int) type;

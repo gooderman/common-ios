@@ -11,7 +11,14 @@
 #import <UShareUI/UMSocialUIManager.h>
 #import <UShareUI/UShareUI.h>
 
+static int share_alert=0;
+
 @implementation sdk (um)
++ (void) um_set_sharealert : (int)flag
+{
+    share_alert = flag;
+}
+
 + (BOOL) um_isinstall : (NSString*)name
 {
     return [[UMSocialManager defaultManager]  isInstall:UMSocialPlatformType_WechatSession];
@@ -203,9 +210,12 @@ typedef void(^UM_SHARE)(UMSocialPlatformType platformType, NSDictionary *userInf
         [dic setValue:[NSNumber numberWithInt:err] forKey:SDK_ERROR];
     }
     [sdk notifyEventByObject: dic];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [sdk um_share_alert:error];
-    });
+    if(share_alert>0)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [sdk um_share_alert:error];
+        });
+    }
 }
 
 + (void)um_share_alert:(NSError *)error

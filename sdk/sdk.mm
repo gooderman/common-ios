@@ -137,13 +137,17 @@ static NSMutableDictionary* gDic = nil;
     NSString* text = [dic valueForKey:SDK_SHARE_TEXT];
     NSString* image = [dic valueForKey:SDK_SHARE_IMAGE];
     NSString* url = [dic valueForKey:SDK_SHARE_URL];
+    NSNumber* alert = [dic valueForKey:SDK_SHARE_RESULT_ALERT];
+
     
     if(!type)   type = [NSNumber numberWithInt:-1];
     if(!title)  title=@"";
     if(!text)   text=@"";
     if(!image)  image=@"";
     if(!url)    url=@"";
+    if(!alert)  alert = [NSNumber numberWithInt:0];
     
+    [sdk um_set_sharealert:[alert intValue]];
     [sdk um_share:[type intValue] Title:title Text:text Img:image Url:url];
 }
 

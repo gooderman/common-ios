@@ -44,6 +44,7 @@
 #define SDK_SHARE_TEXT      @"text"
 #define SDK_SHARE_IMAGE     @"image"
 #define SDK_SHARE_URL       @"url"
+#define SDK_SHARE_RESULT_ALERT   @"resultalert"
 //----wx-pay----
 #define SDK_EVT_WXPAY       @"wxpay"
 #define SDK_PRICE           @"price"
