@@ -187,6 +187,7 @@
 
 + (void) openapp:(NSString*) name
 {
+    //open safari only need a httpurl @"http:/www.bing.cn//"
     NSURL* url = [NSURL URLWithString:name];//@"weixin://"
     if ([[UIApplication sharedApplication] canOpenURL:url]) {
         [[UIApplication sharedApplication] openURL:url];
